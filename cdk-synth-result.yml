@@ -1,0 +1,202 @@
+Resources:
+  VPCB9E5F0B4:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: CdkWorkshopStack/VPC
+    Metadata:
+      aws:cdk:path: CdkWorkshopStack/VPC/Resource
+  VPCPublicSubnet1SubnetB4246D30:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.0.0/24
+      VpcId:
+        Ref: VPCB9E5F0B4
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: CdkWorkshopStack/VPC/PublicSubnet1
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1/Subnet
+  VPCPublicSubnet1RouteTableFEE4B781:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: VPCB9E5F0B4
+      Tags:
+        - Key: Name
+          Value: CdkWorkshopStack/VPC/PublicSubnet1
+    Metadata:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1/RouteTable
+  VPCPublicSubnet1RouteTableAssociation0B0896DC:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: VPCPublicSubnet1RouteTableFEE4B781
+      SubnetId:
+        Ref: VPCPublicSubnet1SubnetB4246D30
+    Metadata:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1/RouteTableAssociation
+  VPCPublicSubnet1DefaultRoute91CEF279:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: VPCPublicSubnet1RouteTableFEE4B781
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: VPCIGWB7E252D3
+    DependsOn:
+      - VPCVPCGW99B986DC
+    Metadata:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1/DefaultRoute
+  VPCPublicSubnet2Subnet74179F39:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.1.0/24
+      VpcId:
+        Ref: VPCB9E5F0B4
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: CdkWorkshopStack/VPC/PublicSubnet2
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet2/Subnet
+  VPCPublicSubnet2RouteTable6F1A15F1:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: VPCB9E5F0B4
+      Tags:
+        - Key: Name
+          Value: CdkWorkshopStack/VPC/PublicSubnet2
+    Metadata:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet2/RouteTable
+  VPCPublicSubnet2RouteTableAssociation5A808732:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: VPCPublicSubnet2RouteTable6F1A15F1
+      SubnetId:
+        Ref: VPCPublicSubnet2Subnet74179F39
+    Metadata:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet2/RouteTableAssociation
+  VPCPublicSubnet2DefaultRouteB7481BBA:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: VPCPublicSubnet2RouteTable6F1A15F1
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: VPCIGWB7E252D3
+    DependsOn:
+      - VPCVPCGW99B986DC
+    Metadata:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet2/DefaultRoute
+  VPCIGWB7E252D3:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: CdkWorkshopStack/VPC
+    Metadata:
+      aws:cdk:path: CdkWorkshopStack/VPC/IGW
+  VPCVPCGW99B986DC:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: VPCB9E5F0B4
+      InternetGatewayId:
+        Ref: VPCIGWB7E252D3
+    Metadata:
+      aws:cdk:path: CdkWorkshopStack/VPC/VPCGW
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.16.3,@aws-cdk/aws-cloudwatch=1.18.0,@aws-cdk/aws-ec2=1.18.0,@aws-cdk/aws-iam=1.18.0,@aws-cdk/aws-ssm=1.18.0,@aws-cdk/core=1.18.0,@aws-cdk/cx-api=1.18.0,@aws-cdk/region-info=1.18.0,jsii-runtime=node.js/v11.15.0
+    Condition: CDKMetadataAvailable
+Conditions:
+  CDKMetadataAvailable:
+    Fn::Or:
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ca-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-northwest-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-central-1
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-3
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - me-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - sa-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-2
