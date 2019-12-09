@@ -13,22 +13,18 @@ export class CdkWorkshopStack extends cdk.Stack {
 
     const vpc = new Vpc(this, 'VPC', {
       cidr: '10.0.0.0/16',
+      // maxAzs: 1,
+      // vpcId: 'VPC',
       subnetConfiguration: [
         {
           cidrMask: 24,
-          name: 'Public',
+          name: 'PublicSubnet1',
           subnetType: SubnetType.PUBLIC,
         },
-        // {
-        //   cidrMask: 24,
-        //   name: 'PublicSubnet2',
-        //   subnetType: SubnetType.PUBLIC,
-        // },
-      ]
-      // vpcId: 'VPC'
+      ],
     })
-    // Create the load balancer in a VPC. 'internetFacing' is 'false'
-    // by default, which creates an internal load balancer.
+    // // Create the load balancer in a VPC. 'internetFacing' is 'false'
+    // // by default, which creates an internal load balancer.
     // const lb = new elbv2.ApplicationLoadBalancer(this, 'LB', {
     //     vpc,
     //     internetFacing: true
@@ -57,17 +53,5 @@ export class CdkWorkshopStack extends cdk.Stack {
     //     targets: [asg]
     // });
 
-    // const subnet1 = new Subnet(this, 'PublicSubnet1', {
-    //   cidrBlock: '10.0.1.0/24',
-    //   vpcId: 'VPC',
-    //   availabilityZone: ''
-    // })
-  //   const queue = new sqs.Queue(this, 'CdkWorkshopQueue', {
-  //     visibilityTimeout: cdk.Duration.seconds(300)
-  //   });
-  //
-  //   const topic = new sns.Topic(this, 'CdkWorkshopTopic');
-  //
-  //   topic.addSubscription(new subs.SqsSubscription(queue));
   }
 }
