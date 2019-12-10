@@ -19,6 +19,26 @@ export class CdkWorkshopStack extends cdk.Stack {
       ],
     })
 
+    const lb = new elbv2.ApplicationLoadBalancer(this, 'PublicAlb', {
+        vpc,
+        internetFacing: true
+    })
+
+    const listener = lb.addListener('Listener', {
+    port: 80,
+    open: true,
+    })
+
+    const asg = new autoscaling.AutoScalingGroup(this, 'TargetFleetAutoScalingGroup', {
+        vpc,
+        instanceType: new ec2.InstanceType(ec2.InstanceSize.SMALL),
+        machineImage: new ec2.AmazonLinuxImage()
+    })
+
+    listener.addTargets('TargetFleetTg', {
+    port: 8080,
+    targets: [asg]
+    })
 
   }
 }
