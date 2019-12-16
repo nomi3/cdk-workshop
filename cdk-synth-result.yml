@@ -9,12 +9,14 @@ Resources:
       Tags:
         - Key: Name
           Value: CdkWorkshopStack/VPC
+        - Key: Application
+          Value: CdkWorkshopStack
     Metadata:
       aws:cdk:path: CdkWorkshopStack/VPC/Resource
-  VPCPublicSubnet1Subnet1Subnet3FFF638E:
+  VPCPublicSubnet1SubnetB4246D30:
     Type: AWS::EC2::Subnet
     Properties:
-      CidrBlock: 10.0.0.0/24
+      CidrBlock: 10.0.1.0/24
       VpcId:
         Ref: VPCB9E5F0B4
       AvailabilityZone:
@@ -24,48 +26,52 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: CdkWorkshopStack/VPC/PublicSubnet1Subnet1
+          Value: CdkWorkshopStack/VPC/PublicSubnet1
+        - Key: Application
+          Value: CdkWorkshopStack
         - Key: aws-cdk:subnet-name
-          Value: PublicSubnet1
+          Value: Public
         - Key: aws-cdk:subnet-type
           Value: Public
     Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1Subnet1/Subnet
-  VPCPublicSubnet1Subnet1RouteTableA4D198CF:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1/Subnet
+  VPCPublicSubnet1RouteTableFEE4B781:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId:
         Ref: VPCB9E5F0B4
       Tags:
         - Key: Name
-          Value: CdkWorkshopStack/VPC/PublicSubnet1Subnet1
+          Value: CdkWorkshopStack/VPC/PublicSubnet1
+        - Key: Application
+          Value: CdkWorkshopStack
     Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1Subnet1/RouteTable
-  VPCPublicSubnet1Subnet1RouteTableAssociation9FB59462:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1/RouteTable
+  VPCPublicSubnet1RouteTableAssociation0B0896DC:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId:
-        Ref: VPCPublicSubnet1Subnet1RouteTableA4D198CF
+        Ref: VPCPublicSubnet1RouteTableFEE4B781
       SubnetId:
-        Ref: VPCPublicSubnet1Subnet1Subnet3FFF638E
+        Ref: VPCPublicSubnet1SubnetB4246D30
     Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1Subnet1/RouteTableAssociation
-  VPCPublicSubnet1Subnet1DefaultRouteEB63302E:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1/RouteTableAssociation
+  VPCPublicSubnet1DefaultRoute91CEF279:
     Type: AWS::EC2::Route
     Properties:
       RouteTableId:
-        Ref: VPCPublicSubnet1Subnet1RouteTableA4D198CF
+        Ref: VPCPublicSubnet1RouteTableFEE4B781
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId:
         Ref: VPCIGWB7E252D3
     DependsOn:
       - VPCVPCGW99B986DC
     Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1Subnet1/DefaultRoute
-  VPCPublicSubnet1Subnet2Subnet3DB3CFD0:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1/DefaultRoute
+  VPCPublicSubnet2Subnet74179F39:
     Type: AWS::EC2::Subnet
     Properties:
-      CidrBlock: 10.0.1.0/24
+      CidrBlock: 10.0.2.0/24
       VpcId:
         Ref: VPCB9E5F0B4
       AvailabilityZone:
@@ -75,50 +81,56 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: CdkWorkshopStack/VPC/PublicSubnet1Subnet2
+          Value: CdkWorkshopStack/VPC/PublicSubnet2
+        - Key: Application
+          Value: CdkWorkshopStack
         - Key: aws-cdk:subnet-name
-          Value: PublicSubnet1
+          Value: Public
         - Key: aws-cdk:subnet-type
           Value: Public
     Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1Subnet2/Subnet
-  VPCPublicSubnet1Subnet2RouteTable936A8144:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet2/Subnet
+  VPCPublicSubnet2RouteTable6F1A15F1:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId:
         Ref: VPCB9E5F0B4
       Tags:
         - Key: Name
-          Value: CdkWorkshopStack/VPC/PublicSubnet1Subnet2
+          Value: CdkWorkshopStack/VPC/PublicSubnet2
+        - Key: Application
+          Value: CdkWorkshopStack
     Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1Subnet2/RouteTable
-  VPCPublicSubnet1Subnet2RouteTableAssociation547719BB:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet2/RouteTable
+  VPCPublicSubnet2RouteTableAssociation5A808732:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId:
-        Ref: VPCPublicSubnet1Subnet2RouteTable936A8144
+        Ref: VPCPublicSubnet2RouteTable6F1A15F1
       SubnetId:
-        Ref: VPCPublicSubnet1Subnet2Subnet3DB3CFD0
+        Ref: VPCPublicSubnet2Subnet74179F39
     Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1Subnet2/RouteTableAssociation
-  VPCPublicSubnet1Subnet2DefaultRouteDE66A083:
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet2/RouteTableAssociation
+  VPCPublicSubnet2DefaultRouteB7481BBA:
     Type: AWS::EC2::Route
     Properties:
       RouteTableId:
-        Ref: VPCPublicSubnet1Subnet2RouteTable936A8144
+        Ref: VPCPublicSubnet2RouteTable6F1A15F1
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId:
         Ref: VPCIGWB7E252D3
     DependsOn:
       - VPCVPCGW99B986DC
     Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1Subnet2/DefaultRoute
+      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet2/DefaultRoute
   VPCIGWB7E252D3:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
         - Key: Name
           Value: CdkWorkshopStack/VPC
+        - Key: Application
+          Value: CdkWorkshopStack
     Metadata:
       aws:cdk:path: CdkWorkshopStack/VPC/IGW
   VPCVPCGW99B986DC:
@@ -139,12 +151,15 @@ Resources:
             - PublicAlbSecurityGroup66576C5F
             - GroupId
       Subnets:
-        - Ref: VPCPublicSubnet1Subnet1Subnet3FFF638E
-        - Ref: VPCPublicSubnet1Subnet2Subnet3DB3CFD0
+        - Ref: VPCPublicSubnet1SubnetB4246D30
+        - Ref: VPCPublicSubnet2Subnet74179F39
+      Tags:
+        - Key: Application
+          Value: CdkWorkshopStack
       Type: application
     DependsOn:
-      - VPCPublicSubnet1Subnet1DefaultRouteEB63302E
-      - VPCPublicSubnet1Subnet2DefaultRouteDE66A083
+      - VPCPublicSubnet1DefaultRoute91CEF279
+      - VPCPublicSubnet2DefaultRouteB7481BBA
     Metadata:
       aws:cdk:path: CdkWorkshopStack/PublicAlb/Resource
   PublicAlbSecurityGroup66576C5F:
@@ -157,6 +172,9 @@ Resources:
           FromPort: 80
           IpProtocol: tcp
           ToPort: 80
+      Tags:
+        - Key: Application
+          Value: CdkWorkshopStack
       VpcId:
         Ref: VPCB9E5F0B4
     Metadata:
@@ -196,6 +214,9 @@ Resources:
     Properties:
       Port: 8080
       Protocol: HTTP
+      Tags:
+        - Key: Application
+          Value: CdkWorkshopStack
       TargetType: instance
       VpcId:
         Ref: VPCB9E5F0B4
@@ -212,6 +233,8 @@ Resources:
       Tags:
         - Key: Name
           Value: CdkWorkshopStack/TargetFleetAutoScalingGroup
+        - Key: Application
+          Value: CdkWorkshopStack
       VpcId:
         Ref: VPCB9E5F0B4
     Metadata:
@@ -250,6 +273,8 @@ Resources:
       Tags:
         - Key: Name
           Value: CdkWorkshopStack/TargetFleetAutoScalingGroup
+        - Key: Application
+          Value: CdkWorkshopStack
     Metadata:
       aws:cdk:path: CdkWorkshopStack/TargetFleetAutoScalingGroup/InstanceRole/Resource
   TargetFleetAutoScalingGroupInstanceProfileDE9DCF89:
@@ -289,11 +314,14 @@ Resources:
         - Key: Name
           PropagateAtLaunch: true
           Value: CdkWorkshopStack/TargetFleetAutoScalingGroup
+        - Key: Application
+          PropagateAtLaunch: true
+          Value: CdkWorkshopStack
       TargetGroupARNs:
         - Ref: PublicAlbListenerTargetFleetTgGroupCD6F5E7C
       VPCZoneIdentifier:
-        - Ref: VPCPublicSubnet1Subnet1Subnet3FFF638E
-        - Ref: VPCPublicSubnet1Subnet2Subnet3DB3CFD0
+        - Ref: VPCPublicSubnet1SubnetB4246D30
+        - Ref: VPCPublicSubnet2Subnet74179F39
     UpdatePolicy:
       AutoScalingScheduledAction:
         IgnoreUnmodifiedGroupSizeProperties: true
