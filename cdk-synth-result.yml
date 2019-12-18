@@ -1,4 +1,3 @@
-Resources:
   VPCB9E5F0B4:
     Type: AWS::EC2::VPC
     Properties:
@@ -13,7 +12,7 @@ Resources:
           Value: CdkWorkshopStack
     Metadata:
       aws:cdk:path: CdkWorkshopStack/VPC/Resource
-  VPCPublicSubnet1SubnetB4246D30:
+  PublicSubnet1Subnet03067927:
     Type: AWS::EC2::Subnet
     Properties:
       CidrBlock: 10.0.1.0/24
@@ -23,319 +22,50 @@ Resources:
         Fn::Select:
           - 0
           - Fn::GetAZs: ""
-      MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: CdkWorkshopStack/VPC/PublicSubnet1
+          Value: CdkWorkshopStack/PublicSubnet1
         - Key: Application
           Value: CdkWorkshopStack
-        - Key: aws-cdk:subnet-name
-          Value: Public
-        - Key: aws-cdk:subnet-type
-          Value: Public
     Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1/Subnet
-  VPCPublicSubnet1RouteTableFEE4B781:
+      aws:cdk:path: CdkWorkshopStack/PublicSubnet1/Subnet
+  PublicSubnet1RouteTable57E60591:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId:
         Ref: VPCB9E5F0B4
       Tags:
         - Key: Name
-          Value: CdkWorkshopStack/VPC/PublicSubnet1
+          Value: CdkWorkshopStack/PublicSubnet1
         - Key: Application
           Value: CdkWorkshopStack
     Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1/RouteTable
-  VPCPublicSubnet1RouteTableAssociation0B0896DC:
+      aws:cdk:path: CdkWorkshopStack/PublicSubnet1/RouteTable
+  PublicSubnet1RouteTableAssociation0E73B917:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId:
-        Ref: VPCPublicSubnet1RouteTableFEE4B781
+        Ref: PublicSubnet1RouteTable57E60591
       SubnetId:
-        Ref: VPCPublicSubnet1SubnetB4246D30
+        Ref: PublicSubnet1Subnet03067927
     Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1/RouteTableAssociation
-  VPCPublicSubnet1DefaultRoute91CEF279:
+      aws:cdk:path: CdkWorkshopStack/PublicSubnet1/RouteTableAssociation
+  PublicSubnet1DefaultRoute3017635C:
     Type: AWS::EC2::Route
     Properties:
       RouteTableId:
-        Ref: VPCPublicSubnet1RouteTableFEE4B781
+        Ref: PublicSubnet1RouteTable57E60591
       DestinationCidrBlock: 0.0.0.0/0
-      GatewayId:
-        Ref: VPCIGWB7E252D3
+      GatewayId: InternetGW
     DependsOn:
-      - VPCVPCGW99B986DC
+      - VPCB9E5F0B4
     Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet1/DefaultRoute
-  VPCPublicSubnet2Subnet74179F39:
-    Type: AWS::EC2::Subnet
-    Properties:
-      CidrBlock: 10.0.2.0/24
-      VpcId:
-        Ref: VPCB9E5F0B4
-      AvailabilityZone:
-        Fn::Select:
-          - 1
-          - Fn::GetAZs: ""
-      MapPublicIpOnLaunch: true
-      Tags:
-        - Key: Name
-          Value: CdkWorkshopStack/VPC/PublicSubnet2
-        - Key: Application
-          Value: CdkWorkshopStack
-        - Key: aws-cdk:subnet-name
-          Value: Public
-        - Key: aws-cdk:subnet-type
-          Value: Public
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet2/Subnet
-  VPCPublicSubnet2RouteTable6F1A15F1:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId:
-        Ref: VPCB9E5F0B4
-      Tags:
-        - Key: Name
-          Value: CdkWorkshopStack/VPC/PublicSubnet2
-        - Key: Application
-          Value: CdkWorkshopStack
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet2/RouteTable
-  VPCPublicSubnet2RouteTableAssociation5A808732:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId:
-        Ref: VPCPublicSubnet2RouteTable6F1A15F1
-      SubnetId:
-        Ref: VPCPublicSubnet2Subnet74179F39
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet2/RouteTableAssociation
-  VPCPublicSubnet2DefaultRouteB7481BBA:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId:
-        Ref: VPCPublicSubnet2RouteTable6F1A15F1
-      DestinationCidrBlock: 0.0.0.0/0
-      GatewayId:
-        Ref: VPCIGWB7E252D3
-    DependsOn:
-      - VPCVPCGW99B986DC
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/PublicSubnet2/DefaultRoute
-  VPCIGWB7E252D3:
-    Type: AWS::EC2::InternetGateway
-    Properties:
-      Tags:
-        - Key: Name
-          Value: CdkWorkshopStack/VPC
-        - Key: Application
-          Value: CdkWorkshopStack
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/IGW
-  VPCVPCGW99B986DC:
-    Type: AWS::EC2::VPCGatewayAttachment
-    Properties:
-      VpcId:
-        Ref: VPCB9E5F0B4
-      InternetGatewayId:
-        Ref: VPCIGWB7E252D3
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/VPC/VPCGW
-  PublicAlb84330974:
-    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    Properties:
-      Scheme: internet-facing
-      SecurityGroups:
-        - Fn::GetAtt:
-            - PublicAlbSecurityGroup66576C5F
-            - GroupId
-      Subnets:
-        - Ref: VPCPublicSubnet1SubnetB4246D30
-        - Ref: VPCPublicSubnet2Subnet74179F39
-      Tags:
-        - Key: Application
-          Value: CdkWorkshopStack
-      Type: application
-    DependsOn:
-      - VPCPublicSubnet1DefaultRoute91CEF279
-      - VPCPublicSubnet2DefaultRouteB7481BBA
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/PublicAlb/Resource
-  PublicAlbSecurityGroup66576C5F:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Automatically created Security Group for ELB CdkWorkshopStackPublicAlbD08C4BA8
-      SecurityGroupIngress:
-        - CidrIp: 0.0.0.0/0
-          Description: Allow from anyone on port 80
-          FromPort: 80
-          IpProtocol: tcp
-          ToPort: 80
-      Tags:
-        - Key: Application
-          Value: CdkWorkshopStack
-      VpcId:
-        Ref: VPCB9E5F0B4
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/PublicAlb/SecurityGroup/Resource
-  PublicAlbSecurityGrouptoCdkWorkshopStackTargetFleetAutoScalingGroupInstanceSecurityGroupF9472DFF8080A11F87C1:
-    Type: AWS::EC2::SecurityGroupEgress
-    Properties:
-      GroupId:
-        Fn::GetAtt:
-          - PublicAlbSecurityGroup66576C5F
-          - GroupId
-      IpProtocol: tcp
-      Description: Load balancer to target
-      DestinationSecurityGroupId:
-        Fn::GetAtt:
-          - TargetFleetAutoScalingGroupInstanceSecurityGroupE05F7BB6
-          - GroupId
-      FromPort: 8080
-      ToPort: 8080
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/PublicAlb/SecurityGroup/to CdkWorkshopStackTargetFleetAutoScalingGroupInstanceSecurityGroupF9472DFF:8080
-  PublicAlbListener4E557C86:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties:
-      DefaultActions:
-        - TargetGroupArn:
-            Ref: PublicAlbListenerTargetFleetTgGroupCD6F5E7C
-          Type: forward
-      LoadBalancerArn:
-        Ref: PublicAlb84330974
-      Port: 80
-      Protocol: HTTP
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/PublicAlb/Listener/Resource
-  PublicAlbListenerTargetFleetTgGroupCD6F5E7C:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties:
-      Port: 8080
-      Protocol: HTTP
-      Tags:
-        - Key: Application
-          Value: CdkWorkshopStack
-      TargetType: instance
-      VpcId:
-        Ref: VPCB9E5F0B4
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/PublicAlb/Listener/TargetFleetTgGroup/Resource
-  TargetFleetAutoScalingGroupInstanceSecurityGroupE05F7BB6:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: CdkWorkshopStack/TargetFleetAutoScalingGroup/InstanceSecurityGroup
-      SecurityGroupEgress:
-        - CidrIp: 0.0.0.0/0
-          Description: Allow all outbound traffic by default
-          IpProtocol: "-1"
-      Tags:
-        - Key: Name
-          Value: CdkWorkshopStack/TargetFleetAutoScalingGroup
-        - Key: Application
-          Value: CdkWorkshopStack
-      VpcId:
-        Ref: VPCB9E5F0B4
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/TargetFleetAutoScalingGroup/InstanceSecurityGroup/Resource
-  TargetFleetAutoScalingGroupInstanceSecurityGroupfromCdkWorkshopStackPublicAlbSecurityGroup60CB358A808081097F6B:
-    Type: AWS::EC2::SecurityGroupIngress
-    Properties:
-      IpProtocol: tcp
-      Description: Load balancer to target
-      FromPort: 8080
-      GroupId:
-        Fn::GetAtt:
-          - TargetFleetAutoScalingGroupInstanceSecurityGroupE05F7BB6
-          - GroupId
-      SourceSecurityGroupId:
-        Fn::GetAtt:
-          - PublicAlbSecurityGroup66576C5F
-          - GroupId
-      ToPort: 8080
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/TargetFleetAutoScalingGroup/InstanceSecurityGroup/from CdkWorkshopStackPublicAlbSecurityGroup60CB358A:8080
-  TargetFleetAutoScalingGroupInstanceRole11B774E6:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Statement:
-          - Action: sts:AssumeRole
-            Effect: Allow
-            Principal:
-              Service:
-                Fn::Join:
-                  - ""
-                  - - ec2.
-                    - Ref: AWS::URLSuffix
-        Version: "2012-10-17"
-      Tags:
-        - Key: Name
-          Value: CdkWorkshopStack/TargetFleetAutoScalingGroup
-        - Key: Application
-          Value: CdkWorkshopStack
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/TargetFleetAutoScalingGroup/InstanceRole/Resource
-  TargetFleetAutoScalingGroupInstanceProfileDE9DCF89:
-    Type: AWS::IAM::InstanceProfile
-    Properties:
-      Roles:
-        - Ref: TargetFleetAutoScalingGroupInstanceRole11B774E6
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/TargetFleetAutoScalingGroup/InstanceProfile
-  TargetFleetAutoScalingGroupLaunchConfig2B0F47CB:
-    Type: AWS::AutoScaling::LaunchConfiguration
-    Properties:
-      ImageId:
-        Ref: SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter
-      InstanceType: small
-      IamInstanceProfile:
-        Ref: TargetFleetAutoScalingGroupInstanceProfileDE9DCF89
-      SecurityGroups:
-        - Fn::GetAtt:
-            - TargetFleetAutoScalingGroupInstanceSecurityGroupE05F7BB6
-            - GroupId
-      UserData:
-        Fn::Base64: "#!/bin/bash"
-    DependsOn:
-      - TargetFleetAutoScalingGroupInstanceRole11B774E6
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/TargetFleetAutoScalingGroup/LaunchConfig
-  TargetFleetAutoScalingGroupASG2ADA3A3C:
-    Type: AWS::AutoScaling::AutoScalingGroup
-    Properties:
-      MaxSize: "1"
-      MinSize: "1"
-      DesiredCapacity: "1"
-      LaunchConfigurationName:
-        Ref: TargetFleetAutoScalingGroupLaunchConfig2B0F47CB
-      Tags:
-        - Key: Name
-          PropagateAtLaunch: true
-          Value: CdkWorkshopStack/TargetFleetAutoScalingGroup
-        - Key: Application
-          PropagateAtLaunch: true
-          Value: CdkWorkshopStack
-      TargetGroupARNs:
-        - Ref: PublicAlbListenerTargetFleetTgGroupCD6F5E7C
-      VPCZoneIdentifier:
-        - Ref: VPCPublicSubnet1SubnetB4246D30
-        - Ref: VPCPublicSubnet2Subnet74179F39
-    UpdatePolicy:
-      AutoScalingScheduledAction:
-        IgnoreUnmodifiedGroupSizeProperties: true
-    Metadata:
-      aws:cdk:path: CdkWorkshopStack/TargetFleetAutoScalingGroup/ASG
+      aws:cdk:path: CdkWorkshopStack/PublicSubnet1/DefaultRoute
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Modules: aws-cdk=1.18.0,@aws-cdk/aws-autoscaling=1.18.0,@aws-cdk/aws-autoscaling-common=1.18.0,@aws-cdk/aws-cloudwatch=1.18.0,@aws-cdk/aws-ec2=1.18.0,@aws-cdk/aws-elasticloadbalancingv2=1.18.0,@aws-cdk/aws-iam=1.18.0,@aws-cdk/aws-ssm=1.18.0,@aws-cdk/core=1.18.0,@aws-cdk/cx-api=1.18.0,@aws-cdk/region-info=1.18.0,jsii-runtime=node.js/v11.15.0
+      Modules: aws-cdk=1.18.0,@aws-cdk/aws-cloudwatch=1.18.0,@aws-cdk/aws-ec2=1.18.0,@aws-cdk/aws-iam=1.18.0,@aws-cdk/aws-ssm=1.18.0,@aws-cdk/core=1.18.0,@aws-cdk/cx-api=1.18.0,@aws-cdk/region-info=1.18.0,jsii-runtime=node.js/v11.15.0
     Condition: CDKMetadataAvailable
-Parameters:
-  SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter:
-    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
-    Default: /aws/service/ami-amazon-linux-latest/amzn-ami-hvm-x86_64-gp2
 Conditions:
   CDKMetadataAvailable:
     Fn::Or:
