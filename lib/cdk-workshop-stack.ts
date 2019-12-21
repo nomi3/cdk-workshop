@@ -8,7 +8,7 @@ import genVpc from './constructs/vpc'
 const commonTags = [
   {
     key: 'author',
-    value: 'Sho Mizuno'
+    value: 'XXX XXX'
   }
 ]
 
