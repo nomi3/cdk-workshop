@@ -1,16 +1,28 @@
 import { CfnAutoScalingGroup, CfnLaunchConfiguration } from '@aws-cdk/aws-autoscaling'
-import { ConstructProps } from '../../types/index'
+import { ConstructProps, NetworkConstructs } from '../../types/index'
 
 const targetCapacity = {
   minSize: '1',
   default: '2'
 }
 
-export default function ({ stack, scope, id, props }: ConstructProps, vpc: any, elb: any, sg: any): any {
+export default function (
+  { stack, scope, id, props }: ConstructProps,
+  network: NetworkConstructs
+): void {
+  if (typeof network.fleet.sg === 'undefined') {
+    throw new Error('VPC not created')
+  }
+  if (typeof network.fleet.tg === 'undefined') {
+    throw new Error('VPC not created')
+  }
+  if (typeof network.vpc === 'undefined') {
+    throw new Error('VPC not created')
+  }
   const targetFleetLaunchConfig = new CfnLaunchConfiguration(stack, 'targetFleetLaunchConfig', {
     imageId: 'ami-01bbe152bf19d0289',
     instanceType: 't3.micro',
-    securityGroups: sg.targetFleetSg.ref,
+    securityGroups: [network.fleet.sg.ref],
     instanceMonitoring: false,
     associatePublicIpAddress: true
   })
@@ -18,8 +30,8 @@ export default function ({ stack, scope, id, props }: ConstructProps, vpc: any, 
     minSize: targetCapacity.minSize,
     maxSize: targetCapacity.default,
     vpcZoneIdentifier: [
-      vpc.publicSubnet1.ref,
-      vpc.publicSubnet2.ref
+      network.subnets.public[0].ref,
+      network.subnets.public[1].ref
     ],
     availabilityZones: [
       stack.availabilityZones[0],
@@ -30,7 +42,7 @@ export default function ({ stack, scope, id, props }: ConstructProps, vpc: any, 
     healthCheckType: 'EC2',
     healthCheckGracePeriod: 60,
     targetGroupArns: [
-      elb.targetFleetTg.ref
+      network.fleet.tg.ref
     ]
   })
 }

@@ -4,7 +4,7 @@ import { ConstructProps, NetworkConstructs } from '../../types/index'
 export default function (
   { stack, scope, id, props }: ConstructProps,
   network: NetworkConstructs
-): any {
+): void {
   if (typeof network.vpc === 'undefined') {
     throw new Error('VPC not created')
   }
