@@ -13,10 +13,14 @@ import {
 } from '@aws-cdk/aws-ec2'
 
 import {
-  ConstructProps
+  ConstructProps,
+  NetworkConstructs
 } from '../../types/index'
 
-export default function ({ stack, scope, id, props }: ConstructProps): any {
+export default function (
+  { stack, scope, id, props }: ConstructProps,
+  network: NetworkConstructs
+): void {
   // VPC
   const vpc = new CfnVPC(stack, 'VPC', {
     cidrBlock: '10.0.0.0/16',
@@ -73,5 +77,7 @@ export default function ({ stack, scope, id, props }: ConstructProps): any {
     Tag.add(construct, 'Application', id)
     Tag.add(construct, 'Name', construct.node.id)
   })
-  return { vpc, igw, publicSubnet1, publicSubnet2, publicRouteTable }
+
+  network.vpc = vpc
+  network.subnets.public.push(publicSubnet1, publicSubnet2)
 }

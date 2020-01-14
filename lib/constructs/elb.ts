@@ -1,9 +1,18 @@
 import { CfnLoadBalancer, CfnListener, CfnTargetGroup } from '@aws-cdk/aws-elasticloadbalancingv2'
-import { ConstructProps } from '../../types/index'
+import { ConstructProps, NetworkConstructs } from '../../types/index'
 
-export default function ({ stack, scope, id, props }: ConstructProps, vpc: any, sg: any): any {
+export default function (
+  { stack, scope, id, props }: ConstructProps,
+  network: NetworkConstructs
+): void {
+  if (typeof network.loadBalancer.sg === 'undefined') {
+    throw new Error('VPC not created')
+  }
+  if (typeof network.vpc === 'undefined') {
+    throw new Error('VPC not created')
+  }
   // Alb
-  const alb = new CfnLoadBalancer(stack, 'alb', {
+  network.loadBalancer.elb = new CfnLoadBalancer(stack, 'alb', {
     loadBalancerAttributes: [
       {
         key: 'idle_timeout.timeout_seconds',
@@ -11,16 +20,16 @@ export default function ({ stack, scope, id, props }: ConstructProps, vpc: any, 
       }
     ],
     scheme: 'internet-facing',
-    securityGroups: sg.publicAlbSg.ref,
+    securityGroups: [network.loadBalancer.sg.ref],
     subnets: [
-      vpc.publicSubnet1.ref,
-      vpc.publicSubnet2.ref
+      network.subnets.public[0].ref,
+      network.subnets.public[1].ref
     ]
   })
 
   // Target Group
-  const targetFleetTg = new CfnTargetGroup(stack, 'targetFleetTg', {
-    vpcId: vpc.vpc.ref,
+  network.fleet.tg = new CfnTargetGroup(stack, 'targetFleetTg', {
+    vpcId: network.vpc.ref,
     port: 80,
     protocol: 'HTTP',
     healthCheckIntervalSeconds: 30,
@@ -49,12 +58,11 @@ export default function ({ stack, scope, id, props }: ConstructProps, vpc: any, 
     defaultActions: [
       {
         type: 'forward',
-        targetGroupArn: targetFleetTg.ref
+        targetGroupArn: network.fleet.tg.ref
       }
     ],
-    loadBalancerArn: alb.ref,
+    loadBalancerArn: network.loadBalancer.elb.ref,
     port: 80,
     protocol: 'HTTP'
   })
-  return { targetFleetTg }
 }

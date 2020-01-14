@@ -3,46 +3,32 @@ import genVpc from './constructs/vpc'
 import genSg from './constructs/sg'
 import genElb from './constructs/elb'
 import genAsg from './constructs/asg'
+import { ConstructProps, NetworkConstructs } from '../types'
 
 export class CdkWorkshopStack extends Stack {
   constructor (scope: App, id: string, props?: StackProps) {
     super(scope, id, props)
 
-    const vpc = genVpc({
+    const opt: ConstructProps = {
       stack: this,
       scope,
       id,
       props
-    })
+    }
+    const network: NetworkConstructs = {
+      subnets: {
+        public: []
+      },
+      loadBalancer: {},
+      fleet: {}
+    }
 
-    const sg = genSg({
-      stack: this,
-      scope,
-      id,
-      props
-    },
-    vpc
-    )
+    genVpc(opt, network)
 
-    const elb = genElb({
-      stack: this,
-      scope,
-      id,
-      props
-    },
-    vpc,
-    sg
-    )
+    genSg(opt, network)
 
-    genAsg({
-      stack: this,
-      scope,
-      id,
-      props
-    },
-    vpc,
-    elb,
-    sg
-    )
+    genElb(opt, network)
+
+    genAsg(opt, network)
   }
 }
