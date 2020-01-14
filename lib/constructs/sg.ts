@@ -1,9 +1,16 @@
 import { CfnSecurityGroup, CfnSecurityGroupIngress } from '@aws-cdk/aws-ec2'
-import { ConstructProps } from '../../types/index'
+import { ConstructProps, NetworkConstructs } from '../../types/index'
 
-export default function ({ stack, scope, id, props }: ConstructProps, vpc: any): any {
+export default function (
+  { stack, scope, id, props }: ConstructProps,
+  network: NetworkConstructs
+): any {
+  if (typeof network.vpc === 'undefined') {
+    throw new Error('VPC not created')
+  }
+
   // PublicAlbSg
-  const publicAlbSg = new CfnSecurityGroup(stack, 'publicAlbSg', {
+  network.loadBalancer.sg = new CfnSecurityGroup(stack, 'publicAlbSg', {
     groupDescription: 'SecurityGroup for Public ALB',
     securityGroupIngress: [
       {
@@ -14,11 +21,11 @@ export default function ({ stack, scope, id, props }: ConstructProps, vpc: any):
         toPort: 80
       }
     ],
-    vpcId: vpc.vpc.ref
+    vpcId: network.vpc.ref
   })
 
   // TargetFleetSg
-  const targetFleetSg = new CfnSecurityGroup(stack, 'targetFleetSg', {
+  network.fleet.sg = new CfnSecurityGroup(stack, 'targetFleetSg', {
     groupDescription: 'SecurityGroup for Target Fleet',
     securityGroupIngress: [
       {
@@ -29,17 +36,15 @@ export default function ({ stack, scope, id, props }: ConstructProps, vpc: any):
         toPort: 22
       }
     ],
-    vpcId: vpc.vpc.ref
+    vpcId: network.vpc.ref
   })
 
   new CfnSecurityGroupIngress(stack, 'targetFleetSgIngress1', {
-    sourceSecurityGroupId: publicAlbSg.ref,
+    sourceSecurityGroupId: network.loadBalancer.sg.ref,
     description: 'Rule For HTTP Access From Public ALB',
     ipProtocol: 'tcp',
     fromPort: 80,
     toPort: 80,
-    groupId: targetFleetSg.ref
+    groupId: network.fleet.sg.ref
   })
-
-  return { publicAlbSg, targetFleetSg }
 }
