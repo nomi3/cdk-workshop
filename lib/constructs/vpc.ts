@@ -1,8 +1,22 @@
-import { Stack, Tag } from '@aws-cdk/core'
-import { CfnVPC, CfnInternetGateway, CfnVPCGatewayAttachment, CfnSubnet, CfnRouteTable, CfnRoute, CfnSubnetRouteTableAssociation } from '@aws-cdk/aws-ec2'
-import { ConstructProps } from '../../types/index'
+import {
+  Tag
+} from '@aws-cdk/core'
 
-export default function ({ stack, scope, id, props }: ConstructProps) {
+import {
+  CfnVPC,
+  CfnInternetGateway,
+  CfnVPCGatewayAttachment,
+  CfnSubnet,
+  CfnRouteTable,
+  CfnRoute,
+  CfnSubnetRouteTableAssociation
+} from '@aws-cdk/aws-ec2'
+
+import {
+  ConstructProps
+} from '../../types/index'
+
+export default function ({ stack, scope, id, props }: ConstructProps): any {
   // VPC
   const vpc = new CfnVPC(stack, 'VPC', {
     cidrBlock: '10.0.0.0/16',
@@ -30,7 +44,7 @@ export default function ({ stack, scope, id, props }: ConstructProps) {
     availabilityZone: stack.availabilityZones[1]
   })
 
-  //RouteTable
+  // RouteTable
   const publicRouteTable = new CfnRouteTable(stack, 'PublicRouteTable', {
     vpcId: vpc.ref
   })

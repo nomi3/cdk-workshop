@@ -1,7 +1,6 @@
 import { App, Stack, StackProps } from '@aws-cdk/core'
-
-import '..index/types/index'
 import genVpc from './constructs/vpc'
+import genSg from './constructs/sg'
 
 export class CdkWorkshopStack extends Stack {
   constructor (scope: App, id: string, props?: StackProps) {
@@ -13,5 +12,14 @@ export class CdkWorkshopStack extends Stack {
       id,
       props
     })
+
+    genSg({
+      stack: this,
+      scope,
+      id,
+      props
+    },
+    vpc
+    )
   }
 }
