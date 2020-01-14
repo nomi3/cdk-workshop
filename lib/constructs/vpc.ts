@@ -73,4 +73,5 @@ export default function ({ stack, scope, id, props }: ConstructProps): any {
     Tag.add(construct, 'Application', id)
     Tag.add(construct, 'Name', construct.node.id)
   })
+  return { vpc, igw, publicSubnet1, publicSubnet2, publicRouteTable }
 }

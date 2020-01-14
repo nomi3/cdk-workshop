@@ -1,8 +1,7 @@
 import { CfnSecurityGroup, CfnSecurityGroupIngress } from '@aws-cdk/aws-ec2'
 import { ConstructProps } from '../../types/index'
-// import genVpc from './vpc'
 
-export default function ({ stack, scope, id, props }: ConstructProps, vpc: any): void {
+export default function ({ stack, scope, id, props }: ConstructProps, vpc: any): any {
   // PublicAlbSg
   const publicAlbSg = new CfnSecurityGroup(stack, 'publicAlbSg', {
     groupDescription: 'SecurityGroup for Public ALB',
@@ -15,7 +14,7 @@ export default function ({ stack, scope, id, props }: ConstructProps, vpc: any):
         toPort: 80
       }
     ],
-    vpcId: vpc.ref
+    vpcId: vpc.vpc.ref
   })
 
   // TargetFleetSg
@@ -30,7 +29,7 @@ export default function ({ stack, scope, id, props }: ConstructProps, vpc: any):
         toPort: 22
       }
     ],
-    vpcId: vpc.ref
+    vpcId: vpc.vpc.ref
   })
 
   new CfnSecurityGroupIngress(stack, 'targetFleetSgIngress1', {
@@ -41,4 +40,6 @@ export default function ({ stack, scope, id, props }: ConstructProps, vpc: any):
     toPort: 80,
     groupId: targetFleetSg.ref
   })
+
+  return { publicAlbSg, targetFleetSg }
 }
