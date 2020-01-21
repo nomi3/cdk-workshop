@@ -1,3 +1,4 @@
+import { Tag } from '@aws-cdk/core'
 import { CfnSecurityGroup, CfnSecurityGroupIngress } from '@aws-cdk/aws-ec2'
 import { ConstructProps, NetworkConstructs } from '../../types/index'
 
@@ -46,5 +47,14 @@ export default function (
     fromPort: 80,
     toPort: 80,
     groupId: network.fleet.sg.ref
+  })
+
+  // Tag
+  ;[
+    network.loadBalancer.sg,
+    network.fleet.sg
+  ].forEach(construct => {
+    Tag.add(construct, 'Application', id)
+    Tag.add(construct, 'Name', construct.node.id)
   })
 }

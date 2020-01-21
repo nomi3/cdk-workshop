@@ -2,6 +2,7 @@ import { CfnAutoScalingGroup } from '@aws-cdk/aws-autoscaling'
 import { App, Stack, StackProps } from '@aws-cdk/core'
 import { CfnSecurityGroup, CfnSubnet, CfnVPC } from '@aws-cdk/aws-ec2'
 import { CfnLoadBalancer, CfnTargetGroup } from '@aws-cdk/aws-elasticloadbalancingv2'
+import { CfnInstanceProfile } from '@aws-cdk/aws-iam'
 
 export declare interface ConstructProps {
   stack: Stack
@@ -11,6 +12,7 @@ export declare interface ConstructProps {
 }
 
 export declare interface NetworkConstructs {
+  instanceProfile?: CfnInstanceProfile
   vpc?: CfnVPC
   subnets: {
     public: CfnSubnet[]

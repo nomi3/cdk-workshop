@@ -1,3 +1,4 @@
+import { Tag } from '@aws-cdk/core'
 import { CfnLoadBalancer, CfnListener, CfnTargetGroup } from '@aws-cdk/aws-elasticloadbalancingv2'
 import { ConstructProps, NetworkConstructs } from '../../types/index'
 
@@ -52,6 +53,7 @@ export default function (
       httpCode: '200-299'
     }
   })
+  network.fleet.tg.addDependsOn(network.loadBalancer.elb)
 
   // Listener
   new CfnListener(stack, 'listener', {
@@ -64,5 +66,13 @@ export default function (
     loadBalancerArn: network.loadBalancer.elb.ref,
     port: 80,
     protocol: 'HTTP'
+  })
+
+  // Tag
+  ;[
+    network.loadBalancer.elb,
+    network.fleet.tg
+  ].forEach(construct => {
+    Tag.add(construct, 'Application', id)
   })
 }

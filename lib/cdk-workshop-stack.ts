@@ -1,4 +1,5 @@
 import { App, Stack, StackProps } from '@aws-cdk/core'
+import genIam from './constructs/iam'
 import genVpc from './constructs/vpc'
 import genSg from './constructs/sg'
 import genElb from './constructs/elb'
@@ -22,6 +23,7 @@ export class CdkWorkshopStack extends Stack {
       loadBalancer: {},
       fleet: {}
     }
+    genIam(opt, network)
 
     genVpc(opt, network)
 
